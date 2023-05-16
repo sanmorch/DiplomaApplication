@@ -110,7 +110,7 @@ public class SignUpFragment extends Fragment {
         // if user click on "I have an account already"
         alreadySignedUp = view.findViewById(R.id.loginRedirectText);
         // then redirect him to the signIn fragment
-        alreadySignedUp.setOnClickListener(view12 -> navController.navigate(R.id.action_signInFragment_to_signUpFragment2));
+        alreadySignedUp.setOnClickListener(view12 -> navController.navigate(R.id.action_signUpFragment_to_signInFragment));
     }
 
     @Override

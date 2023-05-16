@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -39,7 +40,9 @@ public class SignInFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
         init(view);
+
     }
 
     private void init(View view) {
@@ -85,7 +88,7 @@ public class SignInFragment extends Fragment {
         });
 
         signUpText = view.findViewById(R.id.signupRedirectText);
-        signUpText.setOnClickListener(view12 -> navController.navigate(R.id.action_signInFragment_to_signUpFragment2));
+        signUpText.setOnClickListener(view12 -> navController.navigate(R.id.action_signInFragment_to_signUpFragment));
     }
 
     @Override
