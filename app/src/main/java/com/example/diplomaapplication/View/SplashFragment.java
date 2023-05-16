@@ -45,7 +45,7 @@ public class SplashFragment extends Fragment {
         Handler handler = new Handler();
         handler.postDelayed(() -> {
             if (viewModel.getCurrentUser() != null){
-                navController.navigate(R.id.action_splashFragment_to_homeFragment);
+                navController.navigate(R.id.action_splashFragment_to_signInFragment);
             }else{
                 navController.navigate(R.id.action_splashFragment_to_signInFragment);
             }
