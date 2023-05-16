@@ -28,87 +28,12 @@ import com.example.diplomaapplication.ViewModel.AuthViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private ActionBarDrawerToggle toggle;
-
-    private AuthViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
-        if(savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home);
-        }
-    }
-
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.nav_home) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-            finish();
-        }
-        else if (item.getItemId() == R.id.nav_first_course) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FirstCourseFragment()).commit();
-            finish();
-        }
-        else if (item.getItemId() == R.id.nav_second_course) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SecondCourseFragment()).commit();
-            finish();
-        }
-        else if (item.getItemId() == R.id.nav_third_course) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ThirdCourseFragment()).commit();
-            finish();
-        }
-        else if (item.getItemId() == R.id.nav_fourth_course) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FourthCourseFragment()).commit();
-            finish();
-        }
-        else if (item.getItemId() == R.id.nav_settings) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-            finish();
-        }
-        else if (item.getItemId() == R.id.nav_about_us) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutUsFragment()).commit();
-            finish();
-        }
-        else if (item.getItemId() == R.id.nav_log_out) {
-            viewModel.signOut();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SignInFragment()).commit();
-            finish();
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    protected void init() {
-        viewModel = new ViewModelProvider(this , ViewModelProvider.AndroidViewModelFactory
-                .getInstance(this.getApplication())).get(AuthViewModel.class);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        drawerLayout = findViewById(R.id.drawer_layout);
-
-        navigationView = (NavigationView) this.findViewById(R.id.nav_view);
-
-
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-
-
     }
 }

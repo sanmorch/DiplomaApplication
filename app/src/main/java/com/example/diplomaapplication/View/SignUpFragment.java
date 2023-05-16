@@ -101,9 +101,9 @@ public class SignUpFragment extends Fragment {
             // navigate user to the home page
             viewModel.getFirebaseUserMutableLiveData().observe(getViewLifecycleOwner(), firebaseUser -> {
                 if (firebaseUser != null) {
-                    navController.navigate(R.id.homeFragment);
-                }
-            });
+                   navController.navigate(R.id.homeFragment);
+              }
+           });
 
         });
 
