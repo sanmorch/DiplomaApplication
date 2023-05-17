@@ -1,8 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+    id 'androidx.navigation.safeargs'
 }
-
+apply plugin: "androidx.navigation.safeargs"
 android {
     namespace 'com.example.diplomaapplication'
     compileSdk 33
@@ -67,4 +68,9 @@ dependencies {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
         }
     }
+
+    implementation "androidx.navigation:navigation-fragment:2.5.3"
+    implementation "androidx.navigation:navigation-ui:2.5.3"
+    apply plugin: 'androidx.navigation.safeargs'
+
 }

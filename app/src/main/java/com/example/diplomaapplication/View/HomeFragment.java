@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,13 +20,14 @@ import android.view.ViewGroup;
 import com.example.diplomaapplication.Adapter.CourseListAdapter;
 import com.example.diplomaapplication.Model.CourseListModel;
 import com.example.diplomaapplication.R;
+import com.example.diplomaapplication.View.HomeFragmentDirections;
 import com.example.diplomaapplication.ViewModel.AuthViewModel;
 import com.example.diplomaapplication.ViewModel.CourseListViewModel;
 
 import java.util.List;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements CourseListAdapter.OnItemClickedListener {
 
     private RecyclerView recyclerView;
     private NavController navController;
@@ -59,19 +61,22 @@ public class HomeFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CourseListAdapter();
+        adapter = new CourseListAdapter(this);
 
         recyclerView.setAdapter(adapter);
 
-        viewModel.getCourseListLiveData().observe(getViewLifecycleOwner(), new Observer<List<CourseListModel>>() {
-            @Override
-            public void onChanged(List<CourseListModel> courseListModels) {
-                adapter.setCourseListModel(courseListModels);
-                adapter.notifyDataSetChanged();
-            }
+        viewModel.getCourseListLiveData().observe(getViewLifecycleOwner(), courseListModels -> {
+            adapter.setCourseListModel(courseListModels);
+            adapter.notifyDataSetChanged();
         });
 
     }
 
-
+    @Override
+    public void onItemClick(int position) {
+        HomeFragmentDirections.ActionHomeFragmentToFirstCourseFragment2 action =
+                HomeFragmentDirections.actionHomeFragmentToFirstCourseFragment2();
+        action.setPosition(position);
+        navController.navigate(action);
+    }
 }

@@ -23,6 +23,10 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         this.courseListModel = courseListModel;
     }
 
+    public CourseListAdapter(OnItemClickedListener onItemClickedListener) {
+        this.onItemClickedListener = onItemClickedListener;
+    }
+
     @NonNull
     @Override
     public CourseListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,6 +53,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         private TextView title;
         private ConstraintLayout constraintLayout;
 
+
         public CourseListViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -60,6 +65,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.Co
         @Override
         public void onClick(View view) {
             onItemClickedListener.onItemClick(getAdapterPosition());
+
         }
     }
 

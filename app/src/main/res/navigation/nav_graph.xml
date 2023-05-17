@@ -50,23 +50,17 @@
         tools:layout="@layout/fragment_home"
         app:navGraph="@navigation/nav_graph">
         <action
-            android:id="@+id/action_homeFragment_to_aboutUsFragment"
-            app:destination="@id/aboutUsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_fourthFragment"
-            app:destination="@id/fourthFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_thirdCourseFragment"
-            app:destination="@id/thirdCourseFragment" />
+            android:id="@+id/action_homeFragment_to_firstCourseFragment2"
+            app:destination="@id/firstCourseFragment" />
         <action
             android:id="@+id/action_homeFragment_to_secondCourseFragment"
             app:destination="@id/secondCourseFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_firstCourseFragment"
-            app:destination="@id/firstCourseFragment" />
+            android:id="@+id/action_homeFragment_to_thirdCourseFragment"
+            app:destination="@id/thirdCourseFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_fourthFragment"
+            app:destination="@id/fourthFragment" />
     </fragment>
     <fragment
         android:id="@+id/firstCourseFragment"
@@ -77,6 +71,10 @@
         <action
             android:id="@+id/action_firstCourseFragment_to_subjectFragment"
             app:destination="@id/subjectFragment" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/secondCourseFragment"
@@ -87,6 +85,10 @@
         <action
             android:id="@+id/action_secondCourseFragment_to_subjectFragment"
             app:destination="@id/subjectFragment" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/thirdCourseFragment"
@@ -97,6 +99,9 @@
         <action
             android:id="@+id/action_thirdCourseFragment_to_subjectFragment"
             app:destination="@id/subjectFragment" />
+        <argument android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/fourthFragment"
@@ -107,6 +112,10 @@
         <action
             android:id="@+id/action_fourthFragment_to_subjectFragment"
             app:destination="@id/subjectFragment" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/subjectFragment"
