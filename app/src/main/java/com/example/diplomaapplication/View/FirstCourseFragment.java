@@ -2,65 +2,166 @@ package com.example.diplomaapplication.View;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.diplomaapplication.Model.CourseListModel;
 import com.example.diplomaapplication.R;
+import com.example.diplomaapplication.Repository.Subject;
+import com.example.diplomaapplication.ViewModel.AuthViewModel;
+import com.example.diplomaapplication.ViewModel.CourseListViewModel;
+import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FirstCourseFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FirstCourseFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class FirstCourseFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextView heading;
+    private NavController navController;
+    private int position;
+    private CourseListViewModel viewModel;
+    private DatabaseReference databaseReference;
+    private String courseId;
+    private int courseNum;
 
-    public FirstCourseFragment() {
-        // Required empty public constructor
-    }
+    // for buttons
+    protected MaterialButtonToggleGroup toggleGroup;
+    private Button firstSemesterButton, secondSemesterButton;
+    private TextView semesterName;
+    // for listView
+    private ListView listView;
+    private ArrayAdapter<String> adapter;
+    private List<String> listData;
+    private List<Subject> listSubject;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FirstCourseFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FirstCourseFragment newInstance(String param1, String param2) {
-        FirstCourseFragment fragment = new FirstCourseFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_first_course, container, false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
+                .getInstance(getActivity().getApplication())).get(CourseListViewModel.class);
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // init for first semester
+        firstSemesterButton = view.findViewById(R.id.firstSemesterButton);
+        init(view);
+
+        viewModel.getCourseListLiveData().observe(getViewLifecycleOwner(), courseListModels -> {
+            CourseListModel course = courseListModels.get(position);
+            heading.setText(course.getHeaderCourse());
+
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+
+            }, 2000);
+
+            courseId = course.getCourseId();
+            courseNum = course.getCourseNum();
+            getDataFromDB(courseNum, 1);
+
+        });
+
+
+    }
+
+    private void getDataFromDB(int course, int semester) {
+        ValueEventListener vListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (listData.size() > 0) listData.clear();
+                if (listSubject.size() > 0) listSubject.clear();
+                // record data from database from first course, first semester
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Subject subject = ds.getValue(Subject.class);
+                    assert subject != null;
+                    if (subject.course == course && subject.semester == semester) {
+                        listData.add(subject.name);
+                        listSubject.add(subject);
+                    }
+                }
+                // notify arrayAdapter about changing data
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        databaseReference.addValueEventListener(vListener);
+    }
+
+
+    private void init(View view) {
+        heading = view.findViewById(R.id.headingTextView);
+        navController = Navigation.findNavController(view);
+        position = FirstCourseFragmentArgs.fromBundle(getArguments()).getPosition();
+        semesterName = view.findViewById(R.id.nameSemesterFirstCourse);
+
+        //init for list
+        listView = view.findViewById(R.id.listFirstCourse);
+        listData = new ArrayList<>();
+        listSubject = new ArrayList<>();
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listData);
+        listView.setAdapter(adapter);
+
+        //init for toggleGroup
+        toggleGroup = view.findViewById(R.id.toggleButtonGroup);
+
+        // init for first semester
+        firstSemesterButton = view.findViewById(R.id.firstSemesterButton);
+        firstSemesterButton.setOnClickListener(this);
+
+        // init for second semester
+        secondSemesterButton = view.findViewById(R.id.secondSemesterButton);
+        secondSemesterButton.setOnClickListener(this);
+
+        //init for DB
+        databaseReference = FirebaseDatabase.getInstance().getReference("Subjects");
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.firstSemesterButton) {
+            semesterName.setText("Первый семестр");
+            getDataFromDB(courseNum,1);
+        }
+        if (view.getId() == R.id.secondSemesterButton) {
+            semesterName.setText("Второй семестр");
+            getDataFromDB(courseNum, 2);
+        }
     }
 }

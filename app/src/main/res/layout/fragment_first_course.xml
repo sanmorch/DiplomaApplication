@@ -51,6 +51,7 @@
                 android:textColor="@color/text_selector_pressed"
                 app:strokeColor="@color/stroke_selector_pressed"
                 app:strokeWidth="2dp"
+                android:onClick="setFirstSem"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 />
@@ -67,6 +68,7 @@
                 android:backgroundTint="@color/bg_selector_pressed"
                 android:textColor="@color/text_selector_pressed"
                 app:strokeColor="@color/stroke_selector_pressed"
+                android:onClick="setSecondSem"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 />
