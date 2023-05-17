@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.diplomaapplication.MainActivity;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.ViewModel.AuthViewModel;
 
@@ -40,6 +41,11 @@ public class SignUpFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         init(view);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     private void init(View view) {
