@@ -11,15 +11,19 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.diplomaapplication.R;
+import com.example.diplomaapplication.Repository.Subject;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SubjectFragment extends Fragment {
     // textViews for name and description of subject
     private TextView tvSubjectName, tvSubjectDescription;
+    // button toGoToTheQuiz
+    private Button btnGoToQuiz;
 
     // for navigation
     NavController navController;
@@ -27,7 +31,7 @@ public class SubjectFragment extends Fragment {
     // arguments from previous fragment
     private String arg_key, arg_name, arg_description;
 
-    // TEST for getting data from DB by position
+    // for getting data from DB
     DatabaseReference reference;
 
     @Override
@@ -47,20 +51,28 @@ public class SubjectFragment extends Fragment {
     }
 
     private void init(View view) {
-        // init for fragment's views
-        tvSubjectName = view.findViewById(R.id.subject_name);
-        tvSubjectDescription = view.findViewById(R.id.subject_desc);
-
         // arguments
         arg_key = SubjectFragmentArgs.fromBundle(getArguments()).getSubjectId();
         arg_name = SubjectFragmentArgs.fromBundle(getArguments()).getSubjectName();
         arg_description = SubjectFragmentArgs.fromBundle(getArguments()).getSubjectDesc();
 
+        // init for fragment's views
+        tvSubjectName = view.findViewById(R.id.subject_name);
+        tvSubjectDescription = view.findViewById(R.id.subject_desc);
 
+        // init for button to go to quiz
+        btnGoToQuiz = view.findViewById(R.id.testYourselfButton);
+        btnGoToQuiz.setOnClickListener(view1 -> {
+            SubjectFragmentDirections.ActionSubjectFragmentToQuizFragment action =
+                    SubjectFragmentDirections.actionSubjectFragmentToQuizFragment();
+            action.setSubjectId(arg_key);
+            navController.navigate(action);
+        });
+        
         // init for navigation
         navController = Navigation.findNavController(view);
 
-        // TEST init for DB
+        // init for DB
         reference = FirebaseDatabase.getInstance().getReference("Subjects");
     }
 }
