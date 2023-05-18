@@ -1,25 +1,26 @@
 package com.example.diplomaapplication.Repository;
 
 public class Subject {
-    public String id, name, description;
+    public String name, description, key;
     public Integer course, semester;
 
-    public Subject(String id, String name, String description, Integer course, Integer semester) {
-        this.id = id;
+    public Subject(String key, String name, String description, Integer course, Integer semester) {
         this.name = name;
+        this.key = key;
         this.description = description;
         this.course = course;
         this.semester = semester;
     }
 
-    public Subject() {}
-    public String getId() {
-        return id;
+    public String getKey() {
+        return key;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setKey(String key) {
+        this.key = key;
     }
+
+    public Subject() {}
 
     public String getName() {
         return name;

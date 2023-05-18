@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_homeFragment_to_firstCourseFragment2"
             app:destination="@id/firstCourseFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/firstCourseFragment"
@@ -77,7 +80,15 @@
             android:id="@+id/action_subjectFragment_to_quizFragment"
             app:destination="@id/quizFragment" />
         <argument
-            android:name="courseId"
+            android:name="subjectId"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="subjectName"
+            app:argType="string"
+            android:defaultValue="null" />
+        <argument
+            android:name="subjectDesc"
             app:argType="string"
             android:defaultValue="null" />
     </fragment>

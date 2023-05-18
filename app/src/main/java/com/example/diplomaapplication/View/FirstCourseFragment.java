@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.example.diplomaapplication.Model.CourseListModel;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.Repository.Subject;
+import com.example.diplomaapplication.View.FirstCourseFragmentDirections;
 import com.example.diplomaapplication.ViewModel.AuthViewModel;
 import com.example.diplomaapplication.ViewModel.CourseListViewModel;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -42,7 +44,6 @@ public class FirstCourseFragment extends Fragment implements View.OnClickListene
     private int position;
     private CourseListViewModel viewModel;
     private DatabaseReference databaseReference;
-    private String courseId;
     private int courseNum;
 
     // for buttons
@@ -79,17 +80,21 @@ public class FirstCourseFragment extends Fragment implements View.OnClickListene
         firstSemesterButton = view.findViewById(R.id.firstSemesterButton);
         init(view);
 
+
+        // show list of disciplines
         viewModel.getCourseListLiveData().observe(getViewLifecycleOwner(), courseListModels -> {
             CourseListModel course = courseListModels.get(position);
             heading.setText(course.getHeaderCourse());
 
+            // ЗАДЕРЖКА (зачем...)
             Handler handler = new Handler();
             handler.postDelayed(() -> {
 
             }, 2000);
 
-            courseId = course.getCourseId();
             courseNum = course.getCourseNum();
+
+            // show by default data about first semester this course
             getDataFromDB(courseNum, 1);
 
         });
@@ -137,6 +142,7 @@ public class FirstCourseFragment extends Fragment implements View.OnClickListene
         listSubject = new ArrayList<>();
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listData);
         listView.setAdapter(adapter);
+        setOnClickItem();
 
         //init for toggleGroup
         toggleGroup = view.findViewById(R.id.toggleButtonGroup);
@@ -153,6 +159,7 @@ public class FirstCourseFragment extends Fragment implements View.OnClickListene
         databaseReference = FirebaseDatabase.getInstance().getReference("Subjects");
     }
 
+    // for buttons "First Semester"/"Second Semester"
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.firstSemesterButton) {
@@ -163,5 +170,18 @@ public class FirstCourseFragment extends Fragment implements View.OnClickListene
             semesterName.setText("Второй семестр");
             getDataFromDB(courseNum, 2);
         }
+    }
+
+    // go to the subjectPage with data about this subject
+    private void setOnClickItem() {
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Subject subjectSelected = listSubject.get(i);
+            FirstCourseFragmentDirections.ActionFirstCourseFragmentToSubjectFragment action =
+                    FirstCourseFragmentDirections.actionFirstCourseFragmentToSubjectFragment();
+            action.setSubjectId(subjectSelected.getKey());
+            action.setSubjectName(subjectSelected.getName());
+            action.setSubjectDesc(subjectSelected.getDescription());
+            navController.navigate(action);
+        });
     }
 }
