@@ -4,6 +4,7 @@ public class Subject {
     public String name, description, key;
     public Integer course, semester;
 
+    // constructor
     public Subject(String key, String name, String description, Integer course, Integer semester) {
         this.name = name;
         this.key = key;
