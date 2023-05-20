@@ -89,7 +89,6 @@ public class CourseFragment extends Fragment implements View.OnClickListener {
 
             }, 2000);
 
-            courseNum = course.getCourseNum();
 
             // show by default data about first semester this course
             getDataFromDB(courseNum, 1);
@@ -130,16 +129,13 @@ public class CourseFragment extends Fragment implements View.OnClickListener {
     private void init(View view) {
         heading = view.findViewById(R.id.headingTextView);
         navController = Navigation.findNavController(view);
-        position = FirstCourseFragmentArgs.fromBundle(getArguments()).getPosition();
         semesterName = view.findViewById(R.id.nameSemesterFirstCourse);
 
         //init for list
-        listView = view.findViewById(R.id.listFirstCourse);
         listData = new ArrayList<>();
         listSubject = new ArrayList<>();
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listData);
-        listView.setAdapter(adapter);
-        setOnClickItem();
+
 
         //init for toggleGroup
         toggleGroup = view.findViewById(R.id.toggleButtonGroup);
@@ -170,15 +166,4 @@ public class CourseFragment extends Fragment implements View.OnClickListener {
     }
 
     // go to the subjectPage with data about this subject
-    private void setOnClickItem() {
-        listView.setOnItemClickListener((adapterView, view, i, l) -> {
-            Subject subjectSelected = listSubject.get(i);
-            FirstCourseFragmentDirections.ActionFirstCourseFragmentToSubjectFragment action =
-                    FirstCourseFragmentDirections.actionFirstCourseFragmentToSubjectFragment();
-            action.setSubjectId(subjectSelected.getKey());
-            action.setSubjectName(subjectSelected.getName());
-            action.setSubjectDesc(subjectSelected.getDescription());
-            navController.navigate(action);
-        });
-    }
 }
