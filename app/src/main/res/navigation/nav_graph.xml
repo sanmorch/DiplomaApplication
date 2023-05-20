@@ -66,11 +66,7 @@
             android:id="@+id/action_firstCourseFragment_to_subjectFragment"
             app:destination="@id/subjectFragment" />
         <argument
-            android:name="position"
-            app:argType="integer"
-            android:defaultValue="0" />
-        <argument
-            android:name="courseId"
+            android:name="courseNum"
             app:argType="string"
             android:defaultValue="null" />
     </fragment>

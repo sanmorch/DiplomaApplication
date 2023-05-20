@@ -7,11 +7,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.diplomaapplication.Adapter.CourseListAdapter;
@@ -19,11 +19,14 @@ import com.example.diplomaapplication.Adapter.SubjectListAdapter;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.Repository.Course;
 import com.example.diplomaapplication.databinding.ActivityMainBinding;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 
-public class HomeFragment extends Fragment implements SubjectListAdapter.OnItemClickedListener {
+public class HomeFragment extends Fragment {
     private ListView listView;
     private CourseListAdapter listAdapter;
     private ArrayList<Course> courseArrayList = new ArrayList<>();
@@ -40,6 +43,7 @@ public class HomeFragment extends Fragment implements SubjectListAdapter.OnItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
         for (int i = 0; i < imageList.length; i++){
             course = new Course(nameList[i], imageList[i]);
             courseArrayList.add(course);
@@ -48,6 +52,23 @@ public class HomeFragment extends Fragment implements SubjectListAdapter.OnItemC
         listView = view.findViewById(R.id.courseListView);
         listView.setAdapter(listAdapter);
 
+        listView.setOnItemClickListener((adapterView, view1, i, l) -> {
+            HomeFragmentDirections.ActionHomeFragmentToFirstCourseFragment2 action =
+                    HomeFragmentDirections.actionHomeFragmentToFirstCourseFragment2();
+            Course selectedItem = (Course) adapterView.getItemAtPosition(i);
+            navController = Navigation.findNavController(view);
+            if (selectedItem.getName().equals("ПЕРВЫЙ КУРС")) {
+                action.setCourseNum("FirstCourse");
+            } else if (selectedItem.getName().equals("ВТОРОЙ КУРС")) {
+                action.setCourseNum("SecondCourse");
+            } else if (selectedItem.getName().equals("ТРЕТИЙ КУРС")) {
+                action.setCourseNum("ThirdCourse");
+            } else if (selectedItem.getName().equals("ЧЕТВЕРТЫЙ КУРС")) {
+                action.setCourseNum("FourthCourse");
+            }
+            if (courseArrayList.size() > 0) courseArrayList.clear();
+            navController.navigate(action);
+        });
         return view;
     }
 
@@ -63,11 +84,4 @@ public class HomeFragment extends Fragment implements SubjectListAdapter.OnItemC
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    public void onItemClick(int position) {
-        HomeFragmentDirections.ActionHomeFragmentToFirstCourseFragment2 action =
-                HomeFragmentDirections.actionHomeFragmentToFirstCourseFragment2();
-        action.setPosition(position);
-        navController.navigate(action);
-    }
 }

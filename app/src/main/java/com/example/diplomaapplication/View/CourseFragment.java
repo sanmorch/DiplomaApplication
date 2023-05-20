@@ -32,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseFragment extends Fragment implements View.OnClickListener {
+public class CourseFragment extends Fragment {
 
     private TextView heading;
     private NavController navController;
@@ -129,7 +129,6 @@ public class CourseFragment extends Fragment implements View.OnClickListener {
     private void init(View view) {
         heading = view.findViewById(R.id.headingTextView);
         navController = Navigation.findNavController(view);
-        semesterName = view.findViewById(R.id.nameSemesterFirstCourse);
 
         //init for list
         listData = new ArrayList<>();
@@ -140,30 +139,11 @@ public class CourseFragment extends Fragment implements View.OnClickListener {
         //init for toggleGroup
         toggleGroup = view.findViewById(R.id.toggleButtonGroup);
 
-        // init for first semester
-        firstSemesterButton = view.findViewById(R.id.firstSemesterButton);
-        firstSemesterButton.setOnClickListener(this);
 
-        // init for second semester
-        secondSemesterButton = view.findViewById(R.id.secondSemesterButton);
-        secondSemesterButton.setOnClickListener(this);
+
 
         //init for DB
         databaseReference = FirebaseDatabase.getInstance().getReference("Subjects");
     }
 
-    // for buttons "First Semester"/"Second Semester"
-    @Override
-    public void onClick(View view) {
-        if (view.getId() == R.id.firstSemesterButton) {
-            semesterName.setText("Первый семестр");
-            getDataFromDB(courseNum,1);
-        }
-        if (view.getId() == R.id.secondSemesterButton) {
-            semesterName.setText("Второй семестр");
-            getDataFromDB(courseNum, 2);
-        }
-    }
-
-    // go to the subjectPage with data about this subject
 }
