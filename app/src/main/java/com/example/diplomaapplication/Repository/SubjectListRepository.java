@@ -1,20 +1,18 @@
 package com.example.diplomaapplication.Repository;
 
-import com.example.diplomaapplication.Model.CourseListModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.List;
 
-public class CourseListRepository {
-    private OnFireStoreTaskComplete onFireStoreTaskComplete;
+public class SubjectListRepository {
+
+    private SubjectListRepository.OnFireStoreTaskComplete onFireStoreTaskComplete;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference reference = firebaseFirestore.collection("Course");
+    private CollectionReference reference = firebaseFirestore
+            .collection("Course").document(courseId)
+            .collection("Subjects");
 
-    public CourseListRepository(OnFireStoreTaskComplete onFireStoreTaskComplete) {
+    public SubjectListRepository(SubjectListRepository.OnFireStoreTaskComplete onFireStoreTaskComplete) {
         this.onFireStoreTaskComplete = onFireStoreTaskComplete;
     }
 
@@ -22,7 +20,7 @@ public class CourseListRepository {
         reference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 onFireStoreTaskComplete.courseDataLoaded(task.getResult()
-                        .toObjects(CourseListModel.class));
+                        .toObjects(SubjectListModel.class));
             } else {
                 onFireStoreTaskComplete.onError(task.getException());
             }
@@ -30,7 +28,8 @@ public class CourseListRepository {
     }
 
     public interface OnFireStoreTaskComplete {
-        void courseDataLoaded(List<CourseListModel> courseListModel);
+        void courseDataLoaded(List<SubjectListModel> courseListModel);
         void onError(Exception e);
     }
+
 }

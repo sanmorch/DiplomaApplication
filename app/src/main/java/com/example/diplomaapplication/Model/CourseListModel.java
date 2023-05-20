@@ -7,22 +7,12 @@ public class CourseListModel {
     private String courseId;
     private String title;
     private String headerCourse;
-    private int courseNum;
 
     public CourseListModel() {}
-    public CourseListModel(String courseId, String title, String headerCourse, int courseNum) {
+    public CourseListModel(String courseId, String title, String headerCourse) {
         this.courseId = courseId;
         this.title = title;
         this.headerCourse = headerCourse;
-        this.courseNum = courseNum;
-    }
-
-    public int getCourseNum() {
-        return courseNum;
-    }
-
-    public void setCourseNum(int courseNum) {
-        this.courseNum = courseNum;
     }
 
     public String getHeaderCourse() {

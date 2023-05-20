@@ -10,7 +10,7 @@ import com.example.diplomaapplication.Repository.CourseListRepository;
 
 import java.util.List;
 
-public class CourseListViewModel extends ViewModel implements CourseListRepository.onFireStoreTaskComplete {
+public class CourseListViewModel extends ViewModel implements CourseListRepository.OnFireStoreTaskComplete {
 
     private MutableLiveData<List<CourseListModel>> courseListLiveData = new MutableLiveData<>();
     private CourseListRepository repository = new CourseListRepository(this);

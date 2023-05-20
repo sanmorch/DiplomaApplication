@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.FirstCourseFragment">
+    tools:context=".View.CourseFragment">
 
     <TextView
         android:id="@+id/headingTextView"
@@ -111,10 +111,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/linear_for_menu_level2" />
 
-            <ListView
-                android:id="@+id/listFirstCourse"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listSubjectsRecyclerview"
+                android:layout_width="409dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameSemesterFirstCourse" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

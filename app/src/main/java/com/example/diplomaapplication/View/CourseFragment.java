@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,7 +13,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,8 +21,6 @@ import android.widget.TextView;
 import com.example.diplomaapplication.Model.CourseListModel;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.Repository.Subject;
-import com.example.diplomaapplication.View.FirstCourseFragmentDirections;
-import com.example.diplomaapplication.ViewModel.AuthViewModel;
 import com.example.diplomaapplication.ViewModel.CourseListViewModel;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirstCourseFragment extends Fragment implements View.OnClickListener {
+public class CourseFragment extends Fragment implements View.OnClickListener {
 
     private TextView heading;
     private NavController navController;
@@ -50,7 +45,9 @@ public class FirstCourseFragment extends Fragment implements View.OnClickListene
     protected MaterialButtonToggleGroup toggleGroup;
     private Button firstSemesterButton, secondSemesterButton;
     private TextView semesterName;
-    // for listView
+
+
+    // DELETE for listView
     private ListView listView;
     private ArrayAdapter<String> adapter;
     private List<String> listData;
@@ -62,7 +59,7 @@ public class FirstCourseFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_first_course, container, false);
+        return inflater.inflate(R.layout.fragment_course, container, false);
     }
 
     @Override
