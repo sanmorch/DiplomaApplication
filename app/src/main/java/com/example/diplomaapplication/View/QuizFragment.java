@@ -100,12 +100,6 @@ public class QuizFragment extends Fragment {
         subjectId = QuizFragmentArgs.fromBundle(getArguments()).getSubjectId();
         viewModel.setSubjectId(subjectId);
 
-        courseId = QuizFragmentArgs.fromBundle(getArguments()).getCourseId();
-        viewModel.setCourseId(courseId);
-
-        subjectName = QuizFragmentArgs.fromBundle(getArguments()).getSubjectName();
-        viewModel.setSubjectName(subjectName);
-
         option1Btn.setOnClickListener(view12 -> {
             verifyAnswer(option1Btn);
             showNextButton();

@@ -5,27 +5,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10dp"
     tools:context=".View.CourseFragment">
 
-    <TextView
-        android:id="@+id/headingTextView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/courseLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/nav_first_course"
-        android:drawablePadding="8dp"
-        android:paddingLeft="10dp"
-        android:text="Дисциплины первого курса"
-        android:textColor="@color/green_dark"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/backToHomeButton"
+            android:src="@drawable/ic_back"
+            android:backgroundTint="@color/orange_extra"
+            android:contentDescription="go back to home page"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/headingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:layout_gravity="end"
+            android:drawablePadding="8dp"
+            android:paddingLeft="10dp"
+            android:text="1 курс 1 семестр"
+            android:textColor="@color/green_dark"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/headingTextView"
+        app:layout_constraintTop_toBottomOf="@+id/courseLinearLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">

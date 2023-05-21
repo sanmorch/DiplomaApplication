@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class CourseFragment extends Fragment implements SubjectAdapter.OnItemCli
     // for recycleView of subjects
     private RecyclerView recyclerView;
     private SubjectAdapter adapter;
+    private ImageButton goToHomeBtn;
 
     // for navigation to other fragments
     private NavController navController;
@@ -75,11 +77,11 @@ public class CourseFragment extends Fragment implements SubjectAdapter.OnItemCli
         adapter = new SubjectAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        // getting arguments
+        // get arguments
         arg_course = CourseFragmentArgs.fromBundle(getArguments()).getCourse();
         arg_semester = CourseFragmentArgs.fromBundle(getArguments()).getSemester();
 
-        // getting data from DB (saved in LiveListData
+        // get data from DB (saved in LiveListData
         viewModel.getSubjectListLiveData().observe(getViewLifecycleOwner(), subjectModels -> {
             List<SubjectModel> filteredSubjects = subjectModels.stream()
                     .filter(subjectModel -> subjectModel.getCourse() == arg_course &&
@@ -90,8 +92,13 @@ public class CourseFragment extends Fragment implements SubjectAdapter.OnItemCli
             adapter.notifyDataSetChanged();
         });
 
+        // set button "go back to home page" behaviour
+        goToHomeBtn = view.findViewById(R.id.backToHomeButton);
+        goToHomeBtn.setOnClickListener(view1 -> navController.navigate(CourseFragmentDirections.actionFirstCourseFragmentToHomeFragment()));
+
     }
 
+    // navigate to SubjectFragment
     @Override
     public void onItemClick(String subjectId) {
         CourseFragmentDirections.ActionFirstCourseFragmentToSubjectFragment action =

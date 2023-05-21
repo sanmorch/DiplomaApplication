@@ -73,6 +73,9 @@
             android:name="semester"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_firstCourseFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/subjectFragment"
@@ -101,17 +104,9 @@
             android:name="subjectId"
             app:argType="string"
             android:defaultValue="null" />
-        <argument
-            android:name="subjectName"
-            app:argType="string"
-            android:defaultValue="null" />
         <action
             android:id="@+id/action_quizFragment_to_subjectFragment"
             app:destination="@id/subjectFragment" />
-        <argument
-            android:name="courseId"
-            app:argType="string"
-            android:defaultValue="null" />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
