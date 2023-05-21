@@ -3,73 +3,69 @@ package com.example.diplomaapplication.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.diplomaapplication.Model.CourseListModel;
 import com.example.diplomaapplication.R;
+import com.example.diplomaapplication.Repository.Course;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseListViewHolder> {
+public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseViewHolder> {
+    private ArrayList<Course> courseArrayList;
+    private OnItemClickListener listener;
 
-    private List<CourseListModel> courseListModel;
-    private OnItemClickedListener onItemClickedListener;
-
-    public void setCourseListModel(List<CourseListModel> courseListModel) {
-        this.courseListModel = courseListModel;
+    public CourseListAdapter(ArrayList<Course> courseArrayList) {
+        this.courseArrayList = courseArrayList;
     }
 
-    public CourseListAdapter(OnItemClickedListener onItemClickedListener) {
-        this.onItemClickedListener = onItemClickedListener;
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-    public CourseListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.each_course, parent, false);
-        return new CourseListViewHolder(view);
+    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        return new CourseViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CourseListViewHolder holder, int position) {
-        CourseListModel model = courseListModel.get(position);
-        holder.title.setText(model.getTitle());
+    public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
+        Course course = courseArrayList.get(position);
+        holder.imageView.setImageResource(course.getImage());
+        holder.courseName.setText(course.getName());
     }
 
     @Override
     public int getItemCount() {
-        if (courseListModel == null) {
-            return 0;
-        } else {
-            return courseListModel.size();
-        }
+        return courseArrayList.size();
     }
 
-    public class CourseListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private TextView title;
-        private ConstraintLayout constraintLayout;
+    public class CourseViewHolder extends RecyclerView.ViewHolder {
+        private ImageView imageView;
+        private TextView courseName;
 
-
-        public CourseListViewHolder(@NonNull View itemView) {
+        public CourseViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.listImage);
+            courseName = itemView.findViewById(R.id.listName);
 
-            title = itemView.findViewById(R.id.courseTitleList);
-            constraintLayout = itemView.findViewById(R.id.constraintLayout);
-            constraintLayout.setOnClickListener(this);
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(v, position);
+                    }
+                }
+            });
         }
-
-        @Override
-        public void onClick(View view) {
-            onItemClickedListener.onItemClick(getAdapterPosition());
-
-        }
-    }
-
-    public interface OnItemClickedListener {
-        void onItemClick(int position);
     }
 }

@@ -11,7 +11,7 @@
     
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         app:cardElevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,12 +25,13 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/courseTitleList"
+                android:id="@+id/subjectTitleList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Первый курс"
+                android:text="Программирование"
+                android:textAlignment="center"
                 android:textColor="@color/green_dark"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
