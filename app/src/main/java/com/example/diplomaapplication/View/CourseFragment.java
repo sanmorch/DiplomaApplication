@@ -5,60 +5,52 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.diplomaapplication.Model.CourseListModel;
+import com.example.diplomaapplication.Adapter.SubjectAdapter;
+import com.example.diplomaapplication.Model.SubjectModel;
 import com.example.diplomaapplication.R;
-import com.example.diplomaapplication.Repository.Subject;
-import com.example.diplomaapplication.ViewModel.CourseListViewModel;
+import com.example.diplomaapplication.ViewModel.SubjectViewModel;
 import com.google.android.material.button.MaterialButtonToggleGroup;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CourseFragment extends Fragment {
 
-    private TextView heading;
+    // for recycleView of subjects
+    private RecyclerView recyclerView;
+    private SubjectAdapter adapter;
+
+    // for navigation to other fragments
     private NavController navController;
-    private int position;
-    private CourseListViewModel viewModel;
-    private DatabaseReference databaseReference;
-    private int courseNum;
 
-    // for buttons
-    protected MaterialButtonToggleGroup toggleGroup;
-    private Button firstSemesterButton, secondSemesterButton;
-    private TextView semesterName;
+    // for getting data of subjects
+    private SubjectViewModel viewModel;
 
-
-    // DELETE for listView
-    private ListView listView;
-    private ArrayAdapter<String> adapter;
-    private List<String> listData;
-    private List<Subject> listSubject;
-
+    // arguments
+    private int arg_course, arg_semester;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_course, container, false);
     }
 
@@ -66,84 +58,36 @@ public class CourseFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory
-                .getInstance(getActivity().getApplication())).get(CourseListViewModel.class);
+                .getInstance(getActivity().getApplication())).get(SubjectViewModel.class);
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // init for first semester
-        firstSemesterButton = view.findViewById(R.id.firstSemesterButton);
-        init(view);
 
+        // settings for recyclerView
+        recyclerView = view.findViewById(R.id.subjectsRecyclerView);
+        navController = Navigation.findNavController(view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new SubjectAdapter();
+        recyclerView.setAdapter(adapter);
 
-        // show list of disciplines
-        viewModel.getCourseListLiveData().observe(getViewLifecycleOwner(), courseListModels -> {
-            CourseListModel course = courseListModels.get(position);
-            heading.setText(course.getHeaderCourse());
+        // getting arguments
+        arg_course = CourseFragmentArgs.fromBundle(getArguments()).getCourse();
+        arg_semester = CourseFragmentArgs.fromBundle(getArguments()).getSemester();
 
-            // ЗАДЕРЖКА (зачем...)
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
+        // getting data from DB (saved in LiveListData
+        viewModel.getSubjectListLiveData().observe(getViewLifecycleOwner(), subjectModels -> {
+            List<SubjectModel> filteredSubjects = subjectModels.stream()
+                    .filter(subjectModel -> subjectModel.getCourse() == arg_course &&
+                            subjectModel.getSemester() == arg_semester)
+                    .collect(Collectors.toList());
 
-            }, 2000);
-
-
-            // show by default data about first semester this course
-            getDataFromDB(courseNum, 1);
-
+            adapter.setSubjectModelList(filteredSubjects);
+            adapter.notifyDataSetChanged();
         });
 
-
     }
-
-    private void getDataFromDB(int course, int semester) {
-        ValueEventListener vListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (listData.size() > 0) listData.clear();
-                if (listSubject.size() > 0) listSubject.clear();
-                // record data from database from first course, first semester
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    Subject subject = ds.getValue(Subject.class);
-                    assert subject != null;
-                    if (subject.course == course && subject.semester == semester) {
-                        listData.add(subject.name);
-                        listSubject.add(subject);
-                    }
-                }
-                // notify arrayAdapter about changing data
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        databaseReference.addValueEventListener(vListener);
-    }
-
-
-    private void init(View view) {
-        heading = view.findViewById(R.id.headingTextView);
-        navController = Navigation.findNavController(view);
-
-        //init for list
-        listData = new ArrayList<>();
-        listSubject = new ArrayList<>();
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, listData);
-
-
-        //init for toggleGroup
-        toggleGroup = view.findViewById(R.id.toggleButtonGroup);
-
-
-
-
-        //init for DB
-        databaseReference = FirebaseDatabase.getInstance().getReference("Subjects");
-    }
-
 }

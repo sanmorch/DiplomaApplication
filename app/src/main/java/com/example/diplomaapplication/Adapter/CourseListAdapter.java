@@ -1,46 +1,71 @@
 package com.example.diplomaapplication.Adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.Repository.Course;
 
-
 import java.util.ArrayList;
 
+public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.CourseViewHolder> {
+    private ArrayList<Course> courseArrayList;
+    private OnItemClickListener listener;
 
-public class CourseListAdapter extends ArrayAdapter<Course> {
-    private ImageView imageView;
-    private TextView courseName;
+    public CourseListAdapter(ArrayList<Course> courseArrayList) {
+        this.courseArrayList = courseArrayList;
+    }
 
-    public CourseListAdapter(@NonNull Context context, ArrayList<Course> courseArrayList) {
-        super(context, R.layout.list_item, courseArrayList);
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View view, @NonNull ViewGroup parent) {
-        Course course = getItem(position);
+    public CourseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        return new CourseViewHolder(view);
+    }
 
-        if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+    @Override
+    public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
+        Course course = courseArrayList.get(position);
+        holder.imageView.setImageResource(course.getImage());
+        holder.courseName.setText(course.getName());
+    }
+
+    @Override
+    public int getItemCount() {
+        return courseArrayList.size();
+    }
+
+    public class CourseViewHolder extends RecyclerView.ViewHolder {
+        private ImageView imageView;
+        private TextView courseName;
+
+        public CourseViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.listImage);
+            courseName = itemView.findViewById(R.id.listName);
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(v, position);
+                    }
+                }
+            });
         }
-
-        imageView = view.findViewById(R.id.listImage);
-        courseName = view.findViewById(R.id.listName);
-
-        imageView.setImageResource(course.getImage());
-        courseName.setText(course.getName());
-
-        return view;
     }
 }
