@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.diplomaapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SubjectFragment extends Fragment {
     // textViews for name and description of subject
@@ -31,7 +38,9 @@ public class SubjectFragment extends Fragment {
     private String arg_key, arg_name, arg_description;
 
     // for getting data from DB
-    DatabaseReference reference;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference collectionReference = db.collection("Subjects");
+    DocumentReference documentReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,16 +53,33 @@ public class SubjectFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        tvSubjectName.setText(arg_name);
-        tvSubjectDescription.setText(arg_description);
+
 
     }
 
     private void init(View view) {
-        // arguments
+        // get ID argument from CourseFragment
         arg_key = SubjectFragmentArgs.fromBundle(getArguments()).getSubjectId();
-        arg_name = SubjectFragmentArgs.fromBundle(getArguments()).getSubjectName();
-        arg_description = SubjectFragmentArgs.fromBundle(getArguments()).getSubjectDesc();
+
+        // get name and description argument by ID in collection
+        documentReference = collectionReference.document(arg_key);
+        documentReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot currentDocument = task.getResult();
+                if (currentDocument.exists()) {
+                    arg_name = currentDocument.getString("name");
+                    arg_description = currentDocument.getString("description");
+                    tvSubjectName.setText(arg_name);
+                    tvSubjectDescription.setText(arg_description);
+                } else {
+                    Log.d("SubjectERROR", "Document by ID not found");
+                }
+            } else {
+                Log.d("ERROR on getting document", task.getException().getMessage());
+            }
+        });
+
+
 
         // init for fragment's views
         tvSubjectName = view.findViewById(R.id.subject_name);
@@ -71,7 +97,6 @@ public class SubjectFragment extends Fragment {
         // init for navigation
         navController = Navigation.findNavController(view);
 
-        // init for DB
-        reference = FirebaseDatabase.getInstance().getReference("Subjects");
+
     }
 }

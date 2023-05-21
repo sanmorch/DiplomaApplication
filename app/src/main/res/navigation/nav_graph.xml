@@ -87,18 +87,6 @@
             android:name="subjectId"
             app:argType="string"
             android:defaultValue="null" />
-        <argument
-            android:name="subjectName"
-            app:argType="string"
-            android:defaultValue="null" />
-        <argument
-            android:name="subjectDesc"
-            app:argType="string"
-            android:defaultValue="null" />
-        <argument
-            android:name="courseId"
-            app:argType="string"
-            android:defaultValue="null" />
     </fragment>
     <fragment
         android:id="@+id/quizFragment"
