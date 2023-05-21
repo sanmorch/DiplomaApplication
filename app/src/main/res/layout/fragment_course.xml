@@ -17,7 +17,7 @@
 
         <ImageButton
             android:id="@+id/backToHomeButton"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_back_white_on_orange"
             android:backgroundTint="@color/orange_extra"
             android:contentDescription="go back to home page"
             android:layout_width="48dp"

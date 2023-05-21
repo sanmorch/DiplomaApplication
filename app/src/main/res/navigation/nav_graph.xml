@@ -90,6 +90,9 @@
             android:name="subjectId"
             app:argType="string"
             android:defaultValue="null" />
+        <action
+            android:id="@+id/action_subjectFragment_to_firstCourseFragment"
+            app:destination="@id/firstCourseFragment" />
     </fragment>
     <fragment
         android:id="@+id/quizFragment"

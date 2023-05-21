@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.diplomaapplication.R;
@@ -30,12 +31,17 @@ public class SubjectFragment extends Fragment {
     private TextView tvSubjectName, tvSubjectDescription;
     // button toGoToTheQuiz
     private Button btnGoToQuiz;
+    // button goToSubjects
+    private ImageButton goToSubjectsButton;
 
     // for navigation
     NavController navController;
 
     // arguments from previous fragment
     private String arg_key, arg_name, arg_description;
+
+    // arguments for goBackToCourseFragment
+    private int arg_course, arg_semester;
 
     // for getting data from DB
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -58,10 +64,21 @@ public class SubjectFragment extends Fragment {
     }
 
     private void init(View view) {
+
+
+        // init for button to go to CourseFragment
+        goToSubjectsButton = view.findViewById(R.id.backToSubjectsButton);
+
+        // init for button to go to quiz
+        btnGoToQuiz = view.findViewById(R.id.testYourselfButton);
+
+        // init for navigation
+        navController = Navigation.findNavController(view);
+
         // get ID argument from CourseFragment
         arg_key = SubjectFragmentArgs.fromBundle(getArguments()).getSubjectId();
 
-        // get name and description argument by ID in collection
+        // get arguments by ID in collection
         documentReference = collectionReference.document(arg_key);
         documentReference.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -69,6 +86,11 @@ public class SubjectFragment extends Fragment {
                 if (currentDocument.exists()) {
                     arg_name = currentDocument.getString("name");
                     arg_description = currentDocument.getString("description");
+                    arg_course = currentDocument.getLong("course").intValue();
+                    arg_semester = currentDocument.getLong("semester").intValue();
+                    // init for fragment's views
+                    tvSubjectName = view.findViewById(R.id.subject_name);
+                    tvSubjectDescription = view.findViewById(R.id.subject_desc);
                     tvSubjectName.setText(arg_name);
                     tvSubjectDescription.setText(arg_description);
                 } else {
@@ -79,24 +101,21 @@ public class SubjectFragment extends Fragment {
             }
         });
 
+        // onClick for button goBack (to CourseFragment)
+        goToSubjectsButton.setOnClickListener(view12 -> {
+            SubjectFragmentDirections.ActionSubjectFragmentToFirstCourseFragment action =
+                    SubjectFragmentDirections.actionSubjectFragmentToFirstCourseFragment();
+            action.setCourse(arg_course);
+            action.setSemester(arg_semester);
+            navController.navigate(action);
+        });
 
-
-        // init for fragment's views
-        tvSubjectName = view.findViewById(R.id.subject_name);
-        tvSubjectDescription = view.findViewById(R.id.subject_desc);
-
-        // init for button to go to quiz
-        btnGoToQuiz = view.findViewById(R.id.testYourselfButton);
+        // onClick for button goToQuiz (to QuizFragment)
         btnGoToQuiz.setOnClickListener(view1 -> {
             SubjectFragmentDirections.ActionSubjectFragmentToQuizFragment action =
                     SubjectFragmentDirections.actionSubjectFragmentToQuizFragment();
             action.setSubjectId(arg_key);
             navController.navigate(action);
         });
-        
-        // init for navigation
-        navController = Navigation.findNavController(view);
-
-
     }
 }
