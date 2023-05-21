@@ -30,6 +30,8 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +41,11 @@ public class CourseFragment extends Fragment implements SubjectAdapter.OnItemCli
     // for recycleView of subjects
     private RecyclerView recyclerView;
     private SubjectAdapter adapter;
+
+    // pointer to button 'go back to home page'
     private ImageButton goToHomeBtn;
+    // pointer to header of page (course + semester)
+    private TextView headerTV;
 
     // for navigation to other fragments
     private NavController navController;
@@ -95,6 +101,10 @@ public class CourseFragment extends Fragment implements SubjectAdapter.OnItemCli
         // set button "go back to home page" behaviour
         goToHomeBtn = view.findViewById(R.id.backToHomeButton);
         goToHomeBtn.setOnClickListener(view1 -> navController.navigate(CourseFragmentDirections.actionFirstCourseFragmentToHomeFragment()));
+
+        // set header of the page (example '1 курс 1 семестр')
+        headerTV = view.findViewById(R.id.headingTextView);
+        headerTV.setText(arg_course + " курс " + arg_semester + " семестр");
 
     }
 
