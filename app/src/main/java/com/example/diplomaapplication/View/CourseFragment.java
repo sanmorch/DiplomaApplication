@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.diplomaapplication.Adapter.SubjectAdapter;
 import com.example.diplomaapplication.Model.SubjectModel;
 import com.example.diplomaapplication.R;
+import com.example.diplomaapplication.View.CourseFragmentDirections;
 import com.example.diplomaapplication.ViewModel.SubjectViewModel;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CourseFragment extends Fragment {
+public class CourseFragment extends Fragment implements SubjectAdapter.OnItemClickedListener {
 
     // for recycleView of subjects
     private RecyclerView recyclerView;
@@ -71,7 +72,7 @@ public class CourseFragment extends Fragment {
         navController = Navigation.findNavController(view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new SubjectAdapter();
+        adapter = new SubjectAdapter(this);
         recyclerView.setAdapter(adapter);
 
         // getting arguments
@@ -89,5 +90,13 @@ public class CourseFragment extends Fragment {
             adapter.notifyDataSetChanged();
         });
 
+    }
+
+    @Override
+    public void onItemClick(String subjectId) {
+        CourseFragmentDirections.ActionFirstCourseFragmentToSubjectFragment action =
+                CourseFragmentDirections.actionFirstCourseFragmentToSubjectFragment();
+        action.setSubjectId(subjectId);
+        navController.navigate(action);
     }
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.diplomaapplication.Model.SubjectModel;
@@ -17,8 +18,15 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
 
     private List<SubjectModel> subjectModelList;
 
+    // interface for clicking on item of RecycleView
+    private OnItemClickedListener onItemClickedListener;
+
     public void setSubjectModelList(List<SubjectModel> subjectModelList) {
         this.subjectModelList = subjectModelList;
+    }
+
+    public SubjectAdapter(OnItemClickedListener onItemClickedListener) {
+        this.onItemClickedListener = onItemClickedListener;
     }
 
     // при создании элемента класса ViewHolder сохраняем состояние представления
@@ -49,14 +57,30 @@ public class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.SubjectV
 
     // исп. для для кэширования ссылок на эти элементы
     // может быть переиспользован для разных элементов списка, что улучшает производительность
-    public class SubjectViewHolder extends RecyclerView.ViewHolder {
+    public class SubjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView title;
+        private ConstraintLayout constraintLayout;
         public SubjectViewHolder(@NonNull View itemView) {
             super(itemView);
 
             // pointer to the cardView title field
             title = itemView.findViewById(R.id.subjectTitleList);
+            constraintLayout = itemView.findViewById(R.id.constraintLayout);
+            constraintLayout.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickedListener != null) {
+                int position = getAdapterPosition();
+                SubjectModel subjectModel = subjectModelList.get(position);
+                onItemClickedListener.onItemClick(subjectModel.getSubjectID());
+            }
+        }
+    }
+
+    public interface OnItemClickedListener {
+        void onItemClick(String subjectId);
     }
 
 }
