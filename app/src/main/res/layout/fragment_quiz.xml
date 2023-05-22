@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvSubjectTitle" />
 
     <ProgressBar
-        android:id="@+id/quizProgressBar"
+        android:id="@+id/resultProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
@@ -118,7 +118,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:backgroundTint="@color/bg_selector_quiz_answers"
+                android:background="@drawable/button_background_answers"
+                android:paddingHorizontal="10dp"
                 android:text="пятерку"
                 android:textColor="@color/green_dark"
                 android:gravity="center_vertical"
@@ -126,7 +127,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/questionIMG"
-                app:strokeColor="@color/stroke_selector_quiz_answers"
                 app:strokeWidth="2dp" />
 
             <Button
@@ -134,7 +134,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:backgroundTint="@color/bg_selector_quiz_answers"
+                android:background="@drawable/button_background_answers"
+                android:paddingHorizontal="10dp"
                 android:text="пятерку"
                 android:textColor="@color/green_dark"
                 android:gravity="center_vertical"
@@ -142,7 +143,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/answer1Button"
-                app:strokeColor="@color/stroke_selector_quiz_answers"
                 app:strokeWidth="2dp" />
 
             <Button
@@ -150,7 +150,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:backgroundTint="@color/bg_selector_quiz_answers"
+                android:background="@drawable/button_background_answers"
+                android:paddingHorizontal="10dp"
                 android:text="пятерку"
                 android:textColor="@color/green_dark"
                 android:gravity="center_vertical"
@@ -158,7 +159,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/answer2Button"
-                app:strokeColor="@color/stroke_selector_quiz_answers"
                 app:strokeWidth="2dp" />
 
             <Button
@@ -166,7 +166,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:backgroundTint="@color/bg_selector_quiz_answers"
+                android:background="@drawable/button_background_answers"
+                android:paddingHorizontal="10dp"
                 android:text="пятерку"
                 android:gravity="center_vertical"
                 android:textAllCaps="false"
@@ -174,7 +175,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/answer3Button"
-                app:strokeColor="@color/stroke_selector_quiz_answers"
                 app:strokeWidth="2dp" />
 
 

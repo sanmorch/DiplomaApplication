@@ -1,0 +1,18 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Состояние, когда кнопка нажата -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <!-- Цвет границы кнопки при нажатии -->
+            <stroke android:color="@color/orange_extra" android:width="2dp" />
+            <!-- Остальные атрибуты фона кнопки -->
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+    <!-- Состояние по умолчанию -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Остальные атрибуты фона кнопки -->
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+</selector>

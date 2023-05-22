@@ -12,14 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class QuestionViewModel extends ViewModel implements QuestionRepository.OnQuestionLoad, QuestionRepository.OnResultAdded {
+public class QuestionViewModel extends ViewModel implements QuestionRepository.OnQuestionLoad, QuestionRepository.OnResultAdded, QuestionRepository.OnResultLoad {
 
     private MutableLiveData<List<QuestionModel>> questionMutableLiveData;
+    private MutableLiveData<HashMap<String, Long>> resultMutableLiveData;
     private QuestionRepository repository;
 
     public QuestionViewModel() {
         questionMutableLiveData = new MutableLiveData<>();
-        repository = new QuestionRepository(this, this);
+        resultMutableLiveData = new MutableLiveData<>();
+        repository = new QuestionRepository(this, this, this);
     }
 
     public void addResults(HashMap<String, Object> resultMap) {
@@ -28,8 +30,8 @@ public class QuestionViewModel extends ViewModel implements QuestionRepository.O
 
     public void setSubjectID(String subjectId) {
         repository.setSubjectID(subjectId);
-        repository.getQuestions();
     }
+
 
     public void getQuestions() {
         repository.getQuestions();
@@ -47,6 +49,19 @@ public class QuestionViewModel extends ViewModel implements QuestionRepository.O
     @Override
     public boolean onSubmit() {
         return true;
+    }
+
+    public MutableLiveData<HashMap<String, Long>> getResultMutableLiveData() {
+        return resultMutableLiveData;
+    }
+
+    public void getResults() {
+        repository.getResults();
+    }
+
+    @Override
+    public void onResultLoad(HashMap<String, Long> resultMap) {
+        resultMutableLiveData.setValue(resultMap);
     }
 
     @Override

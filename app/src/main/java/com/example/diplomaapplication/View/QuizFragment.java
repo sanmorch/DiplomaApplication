@@ -23,8 +23,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.ViewModel.QuestionViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -81,7 +79,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
         // init for fragment's pointers
         navController = Navigation.findNavController(view);
-        progressBar = view.findViewById(R.id.quizProgressBar);
+        progressBar = view.findViewById(R.id.resultProgressBar);
         option1Btn = view.findViewById(R.id.answer1Button);
         option2Btn = view.findViewById(R.id.answer2Button);
         option3Btn = view.findViewById(R.id.answer3Button);
@@ -93,8 +91,6 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         questionNumberTv = view.findViewById(R.id.quizQuestionsCount);
         subjectName = view.findViewById(R.id.tvSubjectTitle);
         questionImage = view.findViewById(R.id.questionIMG);
-
-
 
         // get subjectID for getting data from collection
         subjectID = QuizFragmentArgs.fromBundle(getArguments()).getSubjectId();
@@ -116,6 +112,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         });
 
         viewModel.setSubjectID(subjectID);
+        viewModel.getQuestions();
 
         option1Btn.setOnClickListener(this);
         option2Btn.setOnClickListener(this);
@@ -223,7 +220,9 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         resultMap.put("wrong", wrongAnswers);
 
         viewModel.addResults(resultMap);
-        navController.navigate(R.id.action_quizFragment_to_resultFragment);
+        QuizFragmentDirections.ActionQuizFragmentToResultFragment action = QuizFragmentDirections.actionQuizFragmentToResultFragment();
+        action.setSubjectID(subjectID);
+        navController.navigate(action);
     }
 
 
@@ -275,6 +274,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         if (currentQuestionNumber == totalQuestions) {
             nextQuestionBtn.setText("завершить");
             nextQuestionBtn.setVisibility(View.VISIBLE);
+            answerExplanationTv.setVisibility(View.VISIBLE);
             nextQuestionBtn.setEnabled(true);
         } else {
             nextQuestionBtn.setVisibility(View.VISIBLE);

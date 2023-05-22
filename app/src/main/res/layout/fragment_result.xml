@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
-        android:id="@+id/quizProgressBar"
+        android:id="@+id/resultProgressBar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         android:textColor="@color/green_dark"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/quizProgressBar" />
+        app:layout_constraintTop_toBottomOf="@+id/resultProgressBar" />
 
     <TextView
         android:id="@+id/tvWrongAnswers"
@@ -85,7 +85,7 @@
         android:textStyle="bold"
         android:textSize="17sp"
         app:layout_constraintStart_toEndOf="@id/tvCorrectAnswers"
-        app:layout_constraintTop_toBottomOf="@id/quizProgressBar" />
+        app:layout_constraintTop_toBottomOf="@id/resultProgressBar" />
 
     <TextView
         android:id="@+id/tvWrongAnswerCount"
