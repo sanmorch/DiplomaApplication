@@ -157,7 +157,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     // set data for this question
     private void loadQuestions(int i, View view) {
         currentQuestionNumber = i;
-        questionNumberTv.setText(String.valueOf(currentQuestionNumber));
+
         viewModel.getQuestionMutableLiveData().observe(getViewLifecycleOwner(), questionModels -> {
             questionTv.setText(questionModels.get(i-1).getQuestion());
             option1Btn.setText(questionModels.get(i-1).getOption_a());
@@ -167,6 +167,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
             answer = questionModels.get(i-1).getAnswer();
             infoMessage = questionModels.get(i-1).getExplanation();
 
+            questionNumberTv.setText(String.valueOf(currentQuestionNumber));
 
             // get questionImage if it exists
             if (!questionModels.get(i-1).getQuestion_img().isEmpty()) {
@@ -234,6 +235,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         option2Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
         option3Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
         option4Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
+        answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.grey_for_background));
 
         // Сброс цвета текста кнопок на исходный
         option1Btn.setTextColor(ContextCompat.getColor(getContext(), R.color.green_dark));
@@ -255,14 +257,14 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     private void verifyAnswer(Button button) {
         if (canAnswer) {
             if (button.getText().equals(answer)) {
-                button.setBackground(ContextCompat.getDrawable(getContext(), R.color.green_correctAnswer));
+                answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.green_correctAnswer));
                 correctAnswers++;
-                answerExplanationTv.setText("Верно подмечено! \n" + infoMessage);
+                answerExplanationTv.setText("Верно подмечено! \n\n" + infoMessage);
             } else {
-                button.setBackground(ContextCompat.getDrawable(getContext(), R.color.red_wrongAnswer));
+                answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.red_wrongAnswer));
                 wrongAnswers++;
-                answerExplanationTv.setText("Неправильно, но ничего страшного \n"
-                        + "Верный ответ: " + answer + "\n" + infoMessage);
+                answerExplanationTv.setText("Неправильно, но ничего страшного \n\n"
+                        + "Верный ответ: " + answer + "\n\n" + infoMessage);
 
             }
         }

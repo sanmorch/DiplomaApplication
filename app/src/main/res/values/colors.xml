@@ -15,7 +15,7 @@
     <color name="green_contrast">#00A67C</color>
     <color name="grey_default_answer">#BBB5B4</color>
     <color name="grey_for_background">#F8F3F1</color>
-    <color name="green_correctAnswer">#C6F2AC</color>
-    <color name="red_wrongAnswer">#E1A396</color>
+    <color name="green_correctAnswer">#e4fadc</color>
+    <color name="red_wrongAnswer">#fae1dc</color>
 
 </resources>
