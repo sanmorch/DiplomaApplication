@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.ViewModel.QuestionViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
@@ -92,6 +98,23 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
         // get subjectID for getting data from collection
         subjectID = QuizFragmentArgs.fromBundle(getArguments()).getSubjectId();
+
+        // get subjectName by subjectID
+        DocumentReference documentReference = FirebaseFirestore.getInstance().collection("Subjects")
+                        .document(subjectID);
+        documentReference.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot currentDocument = task.getResult();
+                if (currentDocument.exists()) {
+                    subjectName.setText(currentDocument.getString("name"));
+                }else {
+                    Log.d("SubjectERROR", "Document by ID not found");
+                }
+            } else {
+                Log.d("ERROR on getting document", task.getException().getMessage());
+            }
+        });
+
         viewModel.setSubjectID(subjectID);
 
         option1Btn.setOnClickListener(this);
@@ -134,6 +157,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     // set data for this question
     private void loadQuestions(int i, View view) {
         currentQuestionNumber = i;
+        questionNumberTv.setText(String.valueOf(currentQuestionNumber));
         viewModel.getQuestionMutableLiveData().observe(getViewLifecycleOwner(), questionModels -> {
             questionTv.setText(questionModels.get(i-1).getQuestion());
             option1Btn.setText(questionModels.get(i-1).getOption_a());
@@ -205,15 +229,27 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
     // come back to start station
     private void resetOption() {
-        answerExplanationTv.setVisibility(View.INVISIBLE);
-        nextQuestionBtn.setVisibility(View.INVISIBLE);
-        nextQuestionBtn.setEnabled(false);
-
-        // get start color to the answers
+        // Сброс фона кнопок на исходный
         option1Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
         option2Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
         option3Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
         option4Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
+
+        // Сброс цвета текста кнопок на исходный
+        option1Btn.setTextColor(ContextCompat.getColor(getContext(), R.color.green_dark));
+        option2Btn.setTextColor(ContextCompat.getColor(getContext(), R.color.green_dark));
+        option3Btn.setTextColor(ContextCompat.getColor(getContext(), R.color.green_dark));
+        option4Btn.setTextColor(ContextCompat.getColor(getContext(), R.color.green_dark));
+
+        // Включение кнопок
+        option1Btn.setEnabled(true);
+        option2Btn.setEnabled(true);
+        option3Btn.setEnabled(true);
+        option4Btn.setEnabled(true);
+
+        // Скрытие объяснения и кнопки nextQuestionBtn
+        answerExplanationTv.setVisibility(View.INVISIBLE);
+        nextQuestionBtn.setVisibility(View.INVISIBLE);
     }
 
     private void verifyAnswer(Button button) {
