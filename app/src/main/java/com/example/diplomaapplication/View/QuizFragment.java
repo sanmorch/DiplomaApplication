@@ -1,5 +1,6 @@
 package com.example.diplomaapplication.View;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -183,15 +184,19 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         // choose your answer
         if (view.getId() == R.id.answer1Button) {
+            option1Btn.setTypeface(null, Typeface.BOLD);
             verifyAnswer(option1Btn);
             showNextButton();
         } else if (view.getId() == R.id.answer2Button) {
+            option2Btn.setTypeface(null, Typeface.BOLD);
             verifyAnswer(option2Btn);
             showNextButton();
         } else if (view.getId() == R.id.answer3Button) {
+            option3Btn.setTypeface(null, Typeface.BOLD);
             verifyAnswer(option3Btn);
             showNextButton();
         } else if (view.getId() == R.id.answer4Button) {
+            option4Btn.setTypeface(null, Typeface.BOLD);
             verifyAnswer(option4Btn);
             showNextButton();
         }
@@ -230,10 +235,19 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     // come back to start station
     private void resetOption() {
         // Сброс фона кнопок на исходный
-        option1Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
-        option2Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
-        option3Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
-        option4Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
+        option1Btn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_background_answers));
+        option1Btn.setTypeface(Typeface.DEFAULT);
+
+        option2Btn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_background_answers));
+        option2Btn.setTypeface(Typeface.DEFAULT);
+
+        option3Btn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_background_answers));
+        option3Btn.setTypeface(Typeface.DEFAULT);
+
+        option4Btn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.button_background_answers));
+        option4Btn.setTypeface(Typeface.DEFAULT);
+
+
         answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.grey_for_background));
 
         // Сброс цвета текста кнопок на исходный
@@ -256,11 +270,13 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     private void verifyAnswer(Button button) {
         if (canAnswer) {
             if (button.getText().equals(answer)) {
-                answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.green_correctAnswer));
+                //answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.green_correctAnswer));
+                button.setTextColor(ContextCompat.getColor(getContext(), R.color.green_correctAnswer));
                 correctAnswers++;
                 answerExplanationTv.setText("Верно подмечено! \n\n" + infoMessage);
             } else {
-                answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.red_wrongAnswer));
+                //answerExplanationTv.setBackground(ContextCompat.getDrawable(getContext(), R.color.red_wrongAnswer));
+                button.setTextColor(ContextCompat.getColor(getContext(), R.color.red_wrongAnswer));
                 wrongAnswers++;
                 answerExplanationTv.setText("Неправильно, но ничего страшного \n\n"
                         + "Верный ответ: " + answer + "\n\n" + infoMessage);
