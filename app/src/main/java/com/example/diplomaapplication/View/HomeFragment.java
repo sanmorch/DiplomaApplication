@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.example.diplomaapplication.Adapter.CourseListAdapter;
 import com.example.diplomaapplication.Adapter.SubjectAdapter;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
+    private ImageButton settingsButton;
     private CourseListAdapter listAdapter;
     private ArrayList<Course> courseArrayList = new ArrayList<>();
 
@@ -42,6 +44,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         for (int i = 0; i < imageList.length; i++) {
@@ -86,6 +89,12 @@ public class HomeFragment extends Fragment {
             }
             courseArrayList.clear();
             navController.navigate(action);
+        });
+
+        settingsButton = view.findViewById(R.id.profileUserButton);
+        settingsButton.setOnClickListener(view12 -> {
+            navController = Navigation.findNavController(view12);
+            navController.navigate(R.id.action_homeFragment_to_settingsFragment);
         });
 
         return view;
