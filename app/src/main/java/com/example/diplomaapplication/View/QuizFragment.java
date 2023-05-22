@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -22,12 +23,22 @@ import com.bumptech.glide.Glide;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.ViewModel.QuestionViewModel;
 
-public class QuizFragment extends Fragment {
+import java.util.HashMap;
+
+public class QuizFragment extends Fragment implements View.OnClickListener {
 
     private QuestionViewModel viewModel;
     private NavController navController;
+
+    // for checking progress in quiz
+    private int currentQuestionNumber = 0;
+    private boolean canAnswer = false;
+    private String answer;
+    private String infoMessage;
+
+    // arguments from subjectFragment
     private String subjectID;
-    private long totalQuestions;
+    private long totalQuestions = 4;
 
     // for fragment's elements
     private ProgressBar progressBar;
@@ -36,6 +47,10 @@ public class QuizFragment extends Fragment {
     private TextView questionTv, answerExplanationTv, questionNumberTv;
     private TextView subjectName;
     private ImageView questionImage;
+
+    // for results
+    private int correctAnswers = 0;
+    private int wrongAnswers = 0;
 
 
     @Override
@@ -78,7 +93,14 @@ public class QuizFragment extends Fragment {
         // get subjectID for getting data from collection
         subjectID = QuizFragmentArgs.fromBundle(getArguments()).getSubjectId();
         viewModel.setSubjectID(subjectID);
-        totalQuestions = 1;
+
+        option1Btn.setOnClickListener(this);
+        option2Btn.setOnClickListener(this);
+        option3Btn.setOnClickListener(this);
+        option4Btn.setOnClickListener(this);
+
+        nextQuestionBtn.setOnClickListener(this);
+        backToSubjectFragmentBtn.setOnClickListener(this);
 
         viewModel.getQuestions();
 
@@ -111,12 +133,15 @@ public class QuizFragment extends Fragment {
 
     // set data for this question
     private void loadQuestions(int i, View view) {
+        currentQuestionNumber = i;
         viewModel.getQuestionMutableLiveData().observe(getViewLifecycleOwner(), questionModels -> {
             questionTv.setText(questionModels.get(i-1).getQuestion());
             option1Btn.setText(questionModels.get(i-1).getOption_a());
             option2Btn.setText(questionModels.get(i-1).getOption_b());
             option3Btn.setText(questionModels.get(i-1).getOption_c());
             option4Btn.setText(questionModels.get(i-1).getOption_d());
+            answer = questionModels.get(i-1).getAnswer();
+            infoMessage = questionModels.get(i-1).getExplanation();
 
 
             // get questionImage if it exists
@@ -126,6 +151,99 @@ public class QuizFragment extends Fragment {
                 questionImage.setVisibility(View.INVISIBLE);
             }
         });
+        canAnswer = true;
+        // get progress of quiz (how many you have already done)
+        Long percent = Long.valueOf(currentQuestionNumber * 100 / totalQuestions);
+        progressBar.setProgress(percent.intValue());
     }
+
+    @Override
+    public void onClick(View view) {
+        // choose your answer
+        if (view.getId() == R.id.answer1Button) {
+            verifyAnswer(option1Btn);
+            showNextButton();
+        } else if (view.getId() == R.id.answer2Button) {
+            verifyAnswer(option2Btn);
+            showNextButton();
+        } else if (view.getId() == R.id.answer3Button) {
+            verifyAnswer(option3Btn);
+            showNextButton();
+        } else if (view.getId() == R.id.answer4Button) {
+            verifyAnswer(option4Btn);
+            showNextButton();
+        }
+        // go to next question OR finish quiz
+        else if (view.getId() == R.id.nextQuestionButton) {
+            if (currentQuestionNumber == totalQuestions) {
+                submitResults();
+            } else {
+                currentQuestionNumber++;
+                loadQuestions(currentQuestionNumber, view);
+                resetOption();
+            }
+        }
+        // go back to subjectPage
+        else if (view.getId() == R.id.closeQuizButton) {
+            QuizFragmentDirections.ActionQuizFragmentToSubjectFragment action =
+                    QuizFragmentDirections.actionQuizFragmentToSubjectFragment();
+            action.setSubjectId(subjectID);
+            navController.navigate(action);
+        }
+    }
+
+    private void submitResults() {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("correct", correctAnswers);
+        resultMap.put("wrong", wrongAnswers);
+
+        viewModel.addResults(resultMap);
+        navController.navigate(R.id.action_quizFragment_to_resultFragment);
+    }
+
+
+
+    // come back to start station
+    private void resetOption() {
+        answerExplanationTv.setVisibility(View.INVISIBLE);
+        nextQuestionBtn.setVisibility(View.INVISIBLE);
+        nextQuestionBtn.setEnabled(false);
+
+        // get start color to the answers
+        option1Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
+        option2Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
+        option3Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
+        option4Btn.setBackground(ContextCompat.getDrawable(getContext(), R.color.bg_selector_quiz_answers));
+    }
+
+    private void verifyAnswer(Button button) {
+        if (canAnswer) {
+            if (button.getText().equals(answer)) {
+                button.setBackground(ContextCompat.getDrawable(getContext(), R.color.green_correctAnswer));
+                correctAnswers++;
+                answerExplanationTv.setText("Верно подмечено! \n" + infoMessage);
+            } else {
+                button.setBackground(ContextCompat.getDrawable(getContext(), R.color.red_wrongAnswer));
+                wrongAnswers++;
+                answerExplanationTv.setText("Неправильно, но ничего страшного \n"
+                        + "Верный ответ: " + answer + "\n" + infoMessage);
+
+            }
+        }
+        canAnswer = false;
+    }
+
+    private void showNextButton() {
+        if (currentQuestionNumber == totalQuestions) {
+            nextQuestionBtn.setText("завершить");
+            nextQuestionBtn.setVisibility(View.VISIBLE);
+            nextQuestionBtn.setEnabled(true);
+        } else {
+            nextQuestionBtn.setVisibility(View.VISIBLE);
+            nextQuestionBtn.setEnabled(true);
+            answerExplanationTv.setVisibility(View.VISIBLE);
+        }
+    }
+
 
 }

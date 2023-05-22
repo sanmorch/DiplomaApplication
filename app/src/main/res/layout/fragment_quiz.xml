@@ -80,7 +80,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="1000dp">
 
             <TextView
                 android:id="@+id/tvQuizQuestion"
@@ -165,6 +165,7 @@
 
             <TextView
                 android:id="@+id/tvExplanation"
+                android:textSize="16sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/answer4Button"
