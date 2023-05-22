@@ -170,10 +170,12 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
             // get questionImage if it exists
             if (!questionModels.get(i-1).getQuestion_img().isEmpty()) {
                 Glide.with(view).load(questionModels.get(i-1).getQuestion_img()).into(questionImage);
+                questionImage.setVisibility(View.VISIBLE); // Показывать ImageView, если изображение существует
             } else {
                 questionImage.setVisibility(View.INVISIBLE);
             }
         });
+
         canAnswer = true;
         // get progress of quiz (how many you have already done)
         Long percent = Long.valueOf(currentQuestionNumber * 100 / totalQuestions);
