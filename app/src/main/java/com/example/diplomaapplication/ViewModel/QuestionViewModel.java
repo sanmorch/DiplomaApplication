@@ -8,36 +8,29 @@ import androidx.lifecycle.ViewModel;
 import com.example.diplomaapplication.Model.QuestionModel;
 import com.example.diplomaapplication.Repository.QuestionRepository;
 
-import java.util.HashMap;
 import java.util.List;
 
-public class QuestionViewModel extends ViewModel implements QuestionRepository.OnQuestionLoad, QuestionRepository.OnResultAdded {
+public class QuestionViewModel extends ViewModel implements QuestionRepository.OnQuestionLoad {
+
     private MutableLiveData<List<QuestionModel>> questionMutableLiveData;
     private QuestionRepository repository;
 
-    public MutableLiveData<List<QuestionModel>> getQuestionMutableLiveData() {
-        return questionMutableLiveData;
-    }
-
     public QuestionViewModel() {
         questionMutableLiveData = new MutableLiveData<>();
-        repository = new QuestionRepository(this, this);
+        repository = new QuestionRepository(this);
     }
 
-    public void addResults(HashMap<String, Object> resultMap) {
-        repository.addResults(resultMap);
-    }
-
-    public void setSubjectName(String subjectName) {repository.setSubjectName(subjectName);}
-
-    public void setSubjectId(String subjectId) {
-
-        repository.setSubjectId(subjectId);
+    public void setSubjectID(String subjectId) {
+        repository.setSubjectID(subjectId);
         repository.getQuestions();
     }
 
-    public void setCourseId(String courseId) {
-        repository.setCourseId(courseId);
+    public void getQuestions() {
+        repository.getQuestions();
+    }
+
+    public MutableLiveData<List<QuestionModel>> getQuestionMutableLiveData() {
+        return questionMutableLiveData;
     }
 
     @Override
@@ -46,12 +39,7 @@ public class QuestionViewModel extends ViewModel implements QuestionRepository.O
     }
 
     @Override
-    public boolean onSubmit() {
-        return true;
-    }
-
-    @Override
     public void onError(Exception e) {
-        Log.d("QuizError", "onError " + e.getMessage());
+        Log.d("QuizERROR", "OnError: " + e.getMessage());
     }
 }

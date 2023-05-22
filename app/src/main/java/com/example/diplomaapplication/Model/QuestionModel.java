@@ -1,11 +1,43 @@
 package com.example.diplomaapplication.Model;
 
+import com.google.firebase.firestore.DocumentId;
+
 public class QuestionModel {
 
+    @DocumentId
     private String questionID;
-    private String answer, question, option_a, option_b, option_c, option_d;
+    private String answer, explanation, question, option_a, option_b, option_c, option_d;
+    private String question_img;
 
     public QuestionModel() {}
+
+    public QuestionModel(String questionID, String explanation, String answer, String question, String option_a, String option_b, String option_c, String option_d, String question_img) {
+        this.questionID = questionID;
+        this.answer = answer;
+        this.explanation = explanation;
+        this.question = question;
+        this.option_a = option_a;
+        this.option_b = option_b;
+        this.option_c = option_c;
+        this.option_d = option_d;
+        this.question_img = question_img;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
+
+    public String getQuestion_img() {
+        return question_img;
+    }
+
+    public void setQuestion_img(String question_img) {
+        this.question_img = question_img;
+    }
 
     public String getQuestionID() {
         return questionID;
@@ -64,13 +96,4 @@ public class QuestionModel {
         this.option_d = option_d;
     }
 
-    public QuestionModel(String questionID, String answer, String question, String option_a, String option_b, String option_c, String option_d) {
-        this.questionID = questionID;
-        this.answer = answer;
-        this.question = question;
-        this.option_a = option_a;
-        this.option_b = option_b;
-        this.option_c = option_c;
-        this.option_d = option_d;
-    }
 }
