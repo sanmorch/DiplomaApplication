@@ -62,7 +62,7 @@
                 android:contentDescription="go home button"/>
 
             <ImageButton
-                android:id="@+id/logOut"
+                android:id="@+id/signOutButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_log_out_green"
@@ -99,7 +99,7 @@
                         android:src="@drawable/ic_raiting" />
 
                     <TextView
-                        android:id="@+id/raiting"
+                        android:id="@+id/totalTests"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -113,11 +113,11 @@
                         android:id="@+id/raiting_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/raiting"
+                        android:layout_below="@id/totalTests"
                         android:layout_centerHorizontal="true"
                         android:fontFamily="serif"
                         android:includeFontPadding="false"
-                        android:text="something"
+                        android:text="тестов пройдено"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -146,7 +146,7 @@
                         android:src="@drawable/ic_raiting" />
 
                     <TextView
-                        android:id="@+id/something_else"
+                        android:id="@+id/percentCorrect"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -160,11 +160,12 @@
                         android:id="@+id/something_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/something_else"
+                        android:layout_below="@id/percentCorrect"
                         android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
                         android:fontFamily="serif"
                         android:includeFontPadding="false"
-                        android:text="something"
+                        android:text="% правильных ответов"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 

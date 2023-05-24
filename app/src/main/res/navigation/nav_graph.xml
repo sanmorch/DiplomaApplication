@@ -130,7 +130,14 @@
         android:name="com.example.diplomaapplication.View.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings"
-        app:navGraph="@navigation/nav_graph"/>
+        app:navGraph="@navigation/nav_graph">
+        <action
+            android:id="@+id/action_settingsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
     <fragment
         android:id="@+id/aboutUsFragment"
         android:name="com.example.diplomaapplication.View.AboutUsFragment"

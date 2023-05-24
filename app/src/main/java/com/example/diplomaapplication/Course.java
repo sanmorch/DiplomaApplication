@@ -1,4 +1,4 @@
-package com.example.diplomaapplication.Repository;
+package com.example.diplomaapplication;
 
 public class Course {
     String name;

@@ -13,8 +13,8 @@ import java.util.List;
 public class SubjectRepository {
     private OnFirestormTaskComplete onFirestormTaskComplete;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-
     private CollectionReference reference = firebaseFirestore.collection("Subjects");
+
 
     public SubjectRepository(OnFirestormTaskComplete onFirestormTaskComplete) {
         this.onFirestormTaskComplete = onFirestormTaskComplete;

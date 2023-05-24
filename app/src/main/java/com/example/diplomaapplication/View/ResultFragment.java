@@ -20,6 +20,9 @@ import android.widget.TextView;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.View.ResultFragmentDirections;
 import com.example.diplomaapplication.ViewModel.QuestionViewModel;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
@@ -28,6 +31,11 @@ public class ResultFragment extends Fragment {
 
     // navigation to homeFragment
     private NavController navController;
+
+    // for DB
+    private CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
+    private DocumentReference documentReference;
+    private String userID;
 
     // for getting result data from DB
     private String subjectID;

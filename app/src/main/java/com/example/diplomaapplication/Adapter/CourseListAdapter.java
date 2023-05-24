@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.diplomaapplication.Course;
 import com.example.diplomaapplication.R;
-import com.example.diplomaapplication.Repository.Course;
 
 import java.util.ArrayList;
 

@@ -16,9 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.diplomaapplication.Adapter.CourseListAdapter;
-import com.example.diplomaapplication.Adapter.SubjectAdapter;
+import com.example.diplomaapplication.Course;
 import com.example.diplomaapplication.R;
-import com.example.diplomaapplication.Repository.Course;
 
 import java.util.ArrayList;
 
