@@ -15,15 +15,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.bumptech.glide.Glide;
 import com.example.diplomaapplication.Adapter.CourseListAdapter;
 import com.example.diplomaapplication.Course;
+import com.example.diplomaapplication.Model.UserModel;
 import com.example.diplomaapplication.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class HomeFragment extends Fragment {
+
+    private String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Users");
+    private DocumentReference documentReference;
+    private UserModel userModel;
+    private String userPhoto;
+    
     private RecyclerView recyclerView;
-    private ImageButton settingsButton;
+    private CircleImageView settingsButton;
     private CourseListAdapter listAdapter;
     private ArrayList<Course> courseArrayList = new ArrayList<>();
 
@@ -50,6 +68,16 @@ public class HomeFragment extends Fragment {
             course = new Course(nameList[i], imageList[i]);
             courseArrayList.add(course);
         }
+
+        settingsButton = view.findViewById(R.id.profileUserPicture);
+        documentReference = collectionReference.document(userID);
+        documentReference.get().addOnSuccessListener(documentSnapshot -> {
+            userModel = documentSnapshot.toObject(UserModel.class);
+            if (userModel != null) {
+                userPhoto = userModel.getProfilePhoto();
+                Glide.with(getActivity()).load(userPhoto).into(settingsButton);
+            }
+        });
 
         listAdapter = new CourseListAdapter(courseArrayList);
         recyclerView = view.findViewById(R.id.courseListView);
@@ -90,7 +118,7 @@ public class HomeFragment extends Fragment {
             navController.navigate(action);
         });
 
-        settingsButton = view.findViewById(R.id.profileUserButton);
+
         settingsButton.setOnClickListener(view12 -> {
             navController = Navigation.findNavController(view12);
             navController.navigate(R.id.action_homeFragment_to_settingsFragment);
