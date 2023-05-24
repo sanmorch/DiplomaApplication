@@ -62,6 +62,7 @@
                 android:text="Войти"
                 android:textSize="18sp"
                 android:layout_marginTop="15dp"
+                android:textColor="@color/white"
                 android:backgroundTint="@color/orange_extra"
                 app:cornerRadius = "20dp"/>
             <TextView

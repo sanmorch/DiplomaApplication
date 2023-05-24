@@ -81,6 +81,7 @@
                 android:text="Зарегистрироваться"
                 android:textSize="18sp"
                 android:layout_marginTop="30dp"
+                android:textColor="@color/white"
                 android:backgroundTint="@color/orange_extra"
                 app:cornerRadius = "20dp"/>
             <TextView

@@ -51,6 +51,25 @@
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
+            <ImageButton
+                android:id="@+id/goHomeButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_back_orange_on_white"
+                android:background="@color/white"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="go home button"/>
+
+            <ImageButton
+                android:id="@+id/logOut"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_log_out_green"
+                android:background="@color/white"
+                android:layout_alignParentRight="true"
+                android:contentDescription="log out"/>
+
 
         </RelativeLayout>
 
