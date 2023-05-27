@@ -7,11 +7,11 @@ public class QuestionModel {
     @DocumentId
     private String questionID;
     private String answer, explanation, question, option_a, option_b, option_c, option_d;
-    private String question_img;
+    private String question_img, optionA_img, optionB_img, optionC_img, optionD_img;
 
     public QuestionModel() {}
 
-    public QuestionModel(String questionID, String explanation, String answer, String question, String option_a, String option_b, String option_c, String option_d, String question_img) {
+    public QuestionModel(String questionID, String answer, String explanation, String question, String option_a, String option_b, String option_c, String option_d, String question_img, String optionA_img, String optionB_img, String optionC_img, String optionD_img) {
         this.questionID = questionID;
         this.answer = answer;
         this.explanation = explanation;
@@ -21,6 +21,42 @@ public class QuestionModel {
         this.option_c = option_c;
         this.option_d = option_d;
         this.question_img = question_img;
+        this.optionA_img = optionA_img;
+        this.optionB_img = optionB_img;
+        this.optionC_img = optionC_img;
+        this.optionD_img = optionD_img;
+    }
+
+    public String getOptionA_img() {
+        return optionA_img;
+    }
+
+    public void setOptionA_img(String optionA_img) {
+        this.optionA_img = optionA_img;
+    }
+
+    public String getOptionB_img() {
+        return optionB_img;
+    }
+
+    public void setOptionB_img(String optionB_img) {
+        this.optionB_img = optionB_img;
+    }
+
+    public String getOptionC_img() {
+        return optionC_img;
+    }
+
+    public void setOptionC_img(String optionC_img) {
+        this.optionC_img = optionC_img;
+    }
+
+    public String getOptionD_img() {
+        return optionD_img;
+    }
+
+    public void setOptionD_img(String optionD_img) {
+        this.optionD_img = optionD_img;
     }
 
     public String getExplanation() {

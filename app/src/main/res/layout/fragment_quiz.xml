@@ -128,7 +128,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/questionIMG"
-                app:strokeWidth="2dp" />
+                app:strokeWidth="2dp"
+                />
 
             <Button
                 android:id="@+id/answer2Button"

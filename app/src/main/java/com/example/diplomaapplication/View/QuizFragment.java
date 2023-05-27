@@ -1,6 +1,7 @@
 package com.example.diplomaapplication.View;
 
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.diplomaapplication.R;
 import com.example.diplomaapplication.ViewModel.QuestionViewModel;
 import com.google.firebase.firestore.DocumentReference;
@@ -70,16 +73,11 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_quiz, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_quiz, container, false);
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
-        // init for fragment's pointers
-        navController = Navigation.findNavController(view);
+
+        // Инициализация элементов интерфейса
         progressBar = view.findViewById(R.id.resultProgressBar);
         option1Btn = view.findViewById(R.id.answer1Button);
         option2Btn = view.findViewById(R.id.answer2Button);
@@ -92,6 +90,22 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         questionNumberTv = view.findViewById(R.id.quizQuestionsCount);
         subjectName = view.findViewById(R.id.tvSubjectTitle);
         questionImage = view.findViewById(R.id.questionIMG);
+
+        // Назначение обработчика кликов
+        option1Btn.setOnClickListener(this);
+        option2Btn.setOnClickListener(this);
+        option3Btn.setOnClickListener(this);
+        option4Btn.setOnClickListener(this);
+        nextQuestionBtn.setOnClickListener(this);
+        backToSubjectFragmentBtn.setOnClickListener(this);
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
 
         // get subjectID for getting data from collection
         subjectID = QuizFragmentArgs.fromBundle(getArguments()).getSubjectId();
@@ -113,16 +127,6 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         });
 
         viewModel.setSubjectID(subjectID);
-        viewModel.getQuestions();
-
-        option1Btn.setOnClickListener(this);
-        option2Btn.setOnClickListener(this);
-        option3Btn.setOnClickListener(this);
-        option4Btn.setOnClickListener(this);
-
-        nextQuestionBtn.setOnClickListener(this);
-        backToSubjectFragmentBtn.setOnClickListener(this);
-
         viewModel.getQuestions();
 
         loadData(view);
@@ -168,18 +172,47 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
             questionNumberTv.setText(String.valueOf(currentQuestionNumber));
 
             // get questionImage if it exists
-            if (!questionModels.get(i-1).getQuestion_img().isEmpty()) {
+            if (questionModels.get(i-1).getQuestion_img() != null && !questionModels.get(i-1).getQuestion_img().isEmpty()) {
                 Glide.with(view).load(questionModels.get(i-1).getQuestion_img()).into(questionImage);
                 questionImage.setVisibility(View.VISIBLE); // Показывать ImageView, если изображение существует
             } else {
                 questionImage.setVisibility(View.INVISIBLE);
             }
+
+            // get answer1 image if it exists
+            loadAnswerImage(view, questionModels.get(i-1).getOptionA_img(), option1Btn);
+
+            // get answer2 image if it exists
+            loadAnswerImage(view, questionModels.get(i-1).getOptionB_img(), option2Btn);
+
+            // get answer3 image if it exists
+            loadAnswerImage(view, questionModels.get(i-1).getOptionC_img(), option3Btn);
+
+            // get answer4 image if it exists
+            loadAnswerImage(view, questionModels.get(i-1).getOptionD_img(), option4Btn);
+
         });
 
         canAnswer = true;
         // get progress of quiz (how many you have already done)
         Long percent = Long.valueOf(currentQuestionNumber * 100 / totalQuestions);
         progressBar.setProgress(percent.intValue());
+    }
+
+    private void loadAnswerImage(View view, String imageUrl, Button button) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(view).load(imageUrl)
+                    .into(new SimpleTarget<Drawable>() {
+                        @Override
+                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                            resource.setBounds(0,0, resource.getIntrinsicWidth() * 4, resource.getIntrinsicHeight()* 4);
+                            button.setCompoundDrawables(null, null, null, resource);
+                        }
+                    });
+        } else {
+            button.setCompoundDrawables(null, null, null, null);
+        }
+
     }
 
     @Override
