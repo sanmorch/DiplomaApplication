@@ -46,7 +46,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
     // arguments from subjectFragment
     private String subjectID;
-    private long totalQuestions = 4;
+    private long totalQuestions = 20;
 
     // for fragment's elements
     private ProgressBar progressBar;
