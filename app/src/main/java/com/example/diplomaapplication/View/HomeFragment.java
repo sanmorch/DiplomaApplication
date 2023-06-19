@@ -74,8 +74,10 @@ public class HomeFragment extends Fragment {
         documentReference.get().addOnSuccessListener(documentSnapshot -> {
             userModel = documentSnapshot.toObject(UserModel.class);
             if (userModel != null) {
-                userPhoto = userModel.getProfilePhoto();
-                Glide.with(getActivity()).load(userPhoto).into(settingsButton);
+                if (userModel.getProfilePhoto() != null) {
+                    userPhoto = userModel.getProfilePhoto();
+                    Glide.with(getActivity()).load(userPhoto).into(settingsButton);
+                }
             }
         });
 
