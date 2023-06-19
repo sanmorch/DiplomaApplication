@@ -161,7 +161,13 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         currentQuestionNumber = i;
 
         viewModel.getQuestionMutableLiveData().observe(getViewLifecycleOwner(), questionModels -> {
-            questionTv.setText(questionModels.get(i-1).getQuestion());
+            if (!questionModels.get(i-1).getQuestion().isEmpty()) {
+                questionTv.setText(questionModels.get(i - 1).getQuestion());
+                questionTv.setVisibility(View.VISIBLE);
+            }
+            else {
+                questionTv.setVisibility(View.GONE);
+            }
             option1Btn.setText(questionModels.get(i-1).getOption_a());
             option2Btn.setText(questionModels.get(i-1).getOption_b());
             option3Btn.setText(questionModels.get(i-1).getOption_c());
@@ -176,7 +182,7 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
                 Glide.with(view).load(questionModels.get(i-1).getQuestion_img()).into(questionImage);
                 questionImage.setVisibility(View.VISIBLE); // Показывать ImageView, если изображение существует
             } else {
-                questionImage.setVisibility(View.INVISIBLE);
+                questionImage.setVisibility(View.GONE);
             }
 
             // get answer1 image if it exists

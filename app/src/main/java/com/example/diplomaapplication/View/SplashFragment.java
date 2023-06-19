@@ -49,6 +49,6 @@ public class SplashFragment extends Fragment {
             }else{
                 navController.navigate(R.id.action_splashFragment_to_signInFragment);
             }
-        }, 4000);
+        }, 2000);
     }
 }
