@@ -1,5 +1,6 @@
 package com.example.diplomaapplication.View;
 
+import android.app.AlertDialog;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -161,29 +164,30 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
         currentQuestionNumber = i;
 
         viewModel.getQuestionMutableLiveData().observe(getViewLifecycleOwner(), questionModels -> {
-            if (!questionModels.get(i-1).getQuestion().isEmpty()) {
-                questionTv.setText(questionModels.get(i - 1).getQuestion());
-                questionTv.setVisibility(View.VISIBLE);
-            }
-            else {
-                questionTv.setVisibility(View.GONE);
-            }
-            option1Btn.setText(questionModels.get(i-1).getOption_a());
-            option2Btn.setText(questionModels.get(i-1).getOption_b());
-            option3Btn.setText(questionModels.get(i-1).getOption_c());
-            option4Btn.setText(questionModels.get(i-1).getOption_d());
-            answer = questionModels.get(i-1).getAnswer();
-            infoMessage = questionModels.get(i-1).getExplanation();
+            try {
+                if (!questionModels.get(i - 1).getQuestion().isEmpty()) {
+                    questionTv.setText(questionModels.get(i - 1).getQuestion());
+                    questionTv.setVisibility(View.VISIBLE);
+                } else {
+                    questionTv.setVisibility(View.GONE);
+                }
+                option1Btn.setText(questionModels.get(i - 1).getOption_a());
+                option2Btn.setText(questionModels.get(i - 1).getOption_b());
+                option3Btn.setText(questionModels.get(i - 1).getOption_c());
+                option4Btn.setText(questionModels.get(i - 1).getOption_d());
+                answer = questionModels.get(i - 1).getAnswer();
+                infoMessage = questionModels.get(i - 1).getExplanation();
 
-            questionNumberTv.setText(String.valueOf(currentQuestionNumber));
+                questionNumberTv.setText(String.valueOf(currentQuestionNumber));
 
-            // get questionImage if it exists
-            if (questionModels.get(i-1).getQuestion_img() != null && !questionModels.get(i-1).getQuestion_img().isEmpty()) {
-                Glide.with(view).load(questionModels.get(i-1).getQuestion_img()).into(questionImage);
-                questionImage.setVisibility(View.VISIBLE); // Показывать ImageView, если изображение существует
-            } else {
-                questionImage.setVisibility(View.GONE);
-            }
+                // get questionImage if it exists
+                if (questionModels.get(i - 1).getQuestion_img() != null && !questionModels.get(i - 1).getQuestion_img().isEmpty()) {
+                    Glide.with(view).load(questionModels.get(i - 1).getQuestion_img()).into(questionImage);
+                    questionImage.setVisibility(View.VISIBLE); // Показывать ImageView, если изображение существует
+                } else {
+                    questionImage.setVisibility(View.GONE);
+                }
+
 
             // get answer1 image if it exists
             loadAnswerImage(view, questionModels.get(i-1).getOptionA_img(), option1Btn);
@@ -196,13 +200,34 @@ public class QuizFragment extends Fragment implements View.OnClickListener {
 
             // get answer4 image if it exists
             loadAnswerImage(view, questionModels.get(i-1).getOptionD_img(), option4Btn);
-
+            }
+            catch (IndexOutOfBoundsException e){
+                // Обработка ошибки при отсутствии вопроса в списке
+                e.printStackTrace();
+                // Показать сообщение об ошибке пользователю
+                showNoTestDialog();
+            }
         });
 
         canAnswer = true;
         // get progress of quiz (how many you have already done)
         Long percent = Long.valueOf(currentQuestionNumber * 100 / totalQuestions);
         progressBar.setProgress(percent.intValue());
+    }
+
+    private void showNoTestDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Приносим свои извинения")
+                .setMessage("Тест по данной дисциплине пока не добавлен")
+                .setPositiveButton("Вернуться на страницу дисциплины", (dialog, which) -> {
+                    // Вернуться на страницу SubjectPage
+                    QuizFragmentDirections.ActionQuizFragmentToSubjectFragment action =
+                            QuizFragmentDirections.actionQuizFragmentToSubjectFragment();
+                    action.setSubjectId(subjectID);
+                    navController.navigate(action);
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void loadAnswerImage(View view, String imageUrl, Button button) {
